@@ -6,61 +6,61 @@ import psycopg2
 
 from config import *
 
+class DBWrapper:
 
-QUERY_ID = 100
+    def __init__(self, h, db, usr, pas, p):
+        try:
+            conn = psycopg2.connect(
+                host=h,
+                database=db,
+                user=usr,
+                password=pas,
+                port=p)
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            sys.exit(1)
 
+        cursor = conn.cursor()
 
-def setup():
-    try:
-        conn = psycopg2.connect(
-            host=DB_HOST,
-            database=DB_NAME,
-            user=DB_USER,
-            password=DB_PASS)
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-        sys.exit(1)
+        try:
+            cursor.execute('SELECT * FROM versions;')
+            versions = cursor.fetchall()
+            df_versions = pd.DataFrame(versions)
 
-    cursor = conn.cursor()
+            cursor.execute('SELECT * FROM brands;')
+            brands = cursor.fetchall()
+            df_brands = pd.DataFrame(brands)
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            cursor.close()
+            sys.exit(1)
 
-    try:
-        cursor.execute('SELECT * FROM versions;')
-        versions = cursor.fetchall()
-        df_versions = pd.DataFrame(versions)
-
-        cursor.execute('SELECT * FROM brands;')
-        brands = cursor.fetchall()
-        df_brands = pd.DataFrame(brands)
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
         cursor.close()
-        sys.exit(1)
 
-    cursor.close()
-
-    return df_brands, df_versions
+        self.df_brands = df_brands
+        self.df_versions = df_versions
 
 
-def get_moto(df_brands, df_versions, qid):
-    idx = df_versions[ID] == qid
-    query = df_versions[idx]
-    brand = df_brands[df_brands[ID] == query[BRAND_ID].values[0]]
+    def get_moto(self, qid):
+        idx = self.df_versions[ID] == qid
+        query = self.df_versions[idx]
+        brand = self.df_brands[self.df_brands[ID] == query[BRAND_ID].values[0]]
 
-    return query.values[0]
+        return query.values[0]
 
 
-def filter_by_param(df_brands, df_versions, param, param_name, sort_param=PRICE):
-    idx = df_versions[param] == param_name
-    query = df_versions[idx].values
-    sorted_query = query[query[:, sort_param].argsort()]
+    def filter_by_param(self, param, param_name, sort_param=PRICE):
+        idx = self.df_versions[param] == param_name
+        query = self.df_versions[idx].values
+        sorted_query = query[query[:, sort_param].argsort()]
 
-    return sorted_query
+        return sorted_query
 
 
 def main():
-    df_brands, df_versions = setup()
-    # query = get_moto(df_brands, df_versions, QUERY_ID)
-    query = filter_by_param(df_brands, df_versions, NAME, 'R 100 RT   (1978-1996)')
+    wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
+    # query = wrapper.get_moto(100)
+    query = wrapper.filter_by_param(NAME, 'R 100 RT   (1978-1996)')
 
     print(query)
 
