@@ -72,6 +72,6 @@ class DBWrapper:
 
     # Moto to string
     def moto2str(self, sel):
-        return 'ID: {}\nMODEL: {}\nBRAND: {}\nYEAR: {}\nFUEL: {}\nPRICE: {}\n'.format(sel[ID], sel[NAME],
-                                                                                      self.get_brand(sel[BRAND_ID]),
-                                                                                      sel[YEAR], sel[FUEL], sel[PRICE])
+        return 'ID: {}\nMODEL: {}\nBRAND: {}\nYEAR: {}\nFUEL: {}\nPRICE: {}'.format(sel[ID], sel[NAME],
+                                                                                    self.get_brand(sel[BRAND_ID]),
+                                                                                    sel[YEAR], sel[FUEL], sel[PRICE])

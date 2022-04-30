@@ -20,11 +20,11 @@ def graficar(wrapper, matrix, moto):
     :param moto: reference moto
     :return: fig
     """
-    prices = matrix[:,PRICE]
-    name = matrix[:,NAME]
-    year = matrix[:,YEAR]
-    brand = matrix[:,BRAND_ID]
-    fuel = matrix[:,FUEL]
+    prices = matrix[:, PRICE]
+    name = matrix[:, NAME]
+    year = matrix[:, YEAR]
+    brand = matrix[:, BRAND_ID]
+    fuel = matrix[:, FUEL]
 
     fig, axs = plt.subplots(2, 2)
 
@@ -69,9 +69,9 @@ def graficar(wrapper, matrix, moto):
 
     # Find closest moto to selection
     err_min = inf
-    sel = matrix[0,:]
+    sel = matrix[0, :]
     for i in range(matrix.shape[0]):
-        m = matrix[i,:]
+        m = matrix[i, :]
         err = abs(x - m[param]) + abs(y - m[PRICE])
 
         if err <= err_min:
