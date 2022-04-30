@@ -1,8 +1,12 @@
-import tkinter
+#!/usr/bin/env python3
 import tkinter as tk
 import matplotlib
-matplotlib.use('TkAgg')
-from matplotlib.figure import Figure
+
+import dbfilter
+import grafiques
+from config import *
+from dbwrapper import DBWrapper
+from dbfilter import DBFilter
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk
@@ -13,25 +17,27 @@ from Test_DB_Wrapper import *
 #import dbfilter
 
 
-class Window(tk.Tk): 
-    def __init__(self, matrix):
+class Window(tk.Tk):
+    def __init__(self, matches, moto):
         super().__init__()
         self.title('Comparar motocicleta')
-        moto = [28277, 'Primavera  125 3V Touring ABS (2014-2020)', 99, 2016, 2, 5997]
-        figure_canvas = FigureCanvasTkAgg(grafiques.graficar(matrix, moto), self)
+        figure_canvas = FigureCanvasTkAgg(grafiques.graficar(matches, moto), self)
         NavigationToolbar2Tk(figure_canvas, self)
 
 
+def main():
+    wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
 
-if __name__ == '__main__':
-    test = Test()
-    print(test)
-    print("+++++++++++++++++++++++++++query returned by Test_DB_Wrapper")
-    window=Window(test)
+    query = wrapper.get_moto(123)
+
+    filters = []
+    filters.append(DBFilter(PRICE, dbfilter.LT, 6000))
+    filters.append(DBFilter(YEAR, dbfilter.GE, 2000))
+    matches = wrapper.apply_filters(filters)
+
+    window = Window(matches, query)
     window.mainloop()
 
 
-
-
-
-
+if __name__ == '__main__':
+    main()
