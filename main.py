@@ -41,14 +41,21 @@ def setup():
     return df_brands, df_versions
 
 
-def main(df_brands, df_versions):
-    idx = df_versions[ID] == QUERY_ID
+def get_moto(df_brands, df_versions, qid):
+    idx = df_versions[ID] == qid
     query = df_versions[idx]
     brand = df_brands[df_brands[ID] == query[BRAND_ID].values[0]]
+
+    return query.values[0]
+
+
+def main():
+    df_brands, df_versions = setup()
+    query = get_moto(df_brands, df_versions, QUERY_ID)
+
     print(query)
 
 
 if __name__ == "__main__":
-    df_brands, df_versions = setup()
-    main(df_brands, df_versions)
+    main()
 
