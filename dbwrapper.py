@@ -49,7 +49,7 @@ class DBWrapper:
 
     # By the brand_id returns the brand_name
     def get_brand(self, bid):
-        return self.df_brands[self.df_brands[ID] == bid]
+        return self.df_brands[self.df_brands[ID] == bid].values[0,1]
 
     # Applys multiple filters and returns the result as a sorted (PRICE by default) numpy.ndarray
     def apply_filters(self, filters, sort_param=PRICE):
@@ -69,3 +69,9 @@ class DBWrapper:
         query = self.df_versions[idx].values
 
         return query[query[:, sort_param].argsort()]
+
+    # Moto to string
+    def moto2str(self, sel):
+        return 'ID: {}\nMODEL: {}\nBRAND: {}\nYEAR: {}\nFUEL: {}\nPRICE: {}\n'.format(sel[ID], sel[NAME],
+                                                                                      self.get_brand(sel[BRAND_ID]),
+                                                                                      sel[YEAR], sel[FUEL], sel[PRICE])
