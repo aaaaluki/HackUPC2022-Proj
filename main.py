@@ -44,7 +44,7 @@ def setup():
 def main(df_brands, df_versions):
     idx = df_versions[ID] == QUERY_ID
     query = df_versions[idx]
-    brand = df_brands[df_brands[ID] == query[BRAND_ID][QUERY_ID - 1]]
+    brand = df_brands[df_brands[ID] == query[BRAND_ID].values[0]]
     print(query)
 
 
