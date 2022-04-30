@@ -11,7 +11,10 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk
 )
-matplotlib.use('TkAgg')
+import grafiques
+from Test_DB_Wrapper import *
+#import dbwrapper
+#import dbfilter
 
 
 class Window(tk.Tk):
