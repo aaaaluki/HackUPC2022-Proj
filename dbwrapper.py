@@ -43,9 +43,11 @@ class DBWrapper:
     def get_moto(self, qid):
         idx = self.df_versions[ID] == qid
         query = self.df_versions[idx]
-        brand = self.df_brands[self.df_brands[ID] == query[BRAND_ID].values[0]]
 
         return query.values[0]
+
+    def get_brand(self, bid):
+        return self.df_brands[self.df_brands[ID] == bid]
 
     def filter_by_param(self, param, param_name, sort_param=PRICE):
         idx = self.df_versions[param] == param_name
