@@ -25,13 +25,15 @@ def main():
     wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
 
     # Some sample data
-    query = wrapper.get_moto(123)
+    query=wrapper.get_moto(123)
 
+    # Some matching data
     filters = []
     filters.append(DBFilter(PRICE, dbfilter.LT, 6000))
     filters.append(DBFilter(YEAR, dbfilter.GE, 2000))
     matches = wrapper.apply_filters(filters)
 
+    # Display data
     window = Window(matches, query)
     window.mainloop()
 
