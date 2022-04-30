@@ -44,15 +44,18 @@ class DBWrapper:
     def get_moto(self, qid):
         idx = self.df_versions[ID] == qid
         query = self.df_versions[idx]
-        brand = self.df_brands[self.df_brands[ID] == query[BRAND_ID].values[0]]
 
         return query.values[0]
+
+    #by the brand_id returns the brand_name
+    def get_brand(self, bid):
+        return self.df_brands[self.df_brands[ID] == bid]
 
     #coincidence search
     #searches the coincidences in value of a certain parameter (name,year...) and returns all the coincidences 
     # ordered by the sort parameter in increasing order
-    def filter_by_param(self, param_type, param_value, sort_param=PRICE):
-        idx = self.df_versions[param_type] == param_value
+    def filter_by_param(self, param, param_name, sort_param=PRICE):
+        idx = self.df_versions[param] == param_name
         query = self.df_versions[idx].values
         sorted_query = query[query[:, sort_param].argsort()]
 
