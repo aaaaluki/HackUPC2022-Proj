@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from config import *
 
 
-PLOT_MARGIN_FUEL = 0.1
-PLOT_MARGIN_YEAR = 2
+MOTO_COLOR = 'red'
+MOTO_LW = 6
 
 
 # Funcio que grafica les variables
@@ -23,31 +23,27 @@ def graficar(matrix, moto):
     fig, axs = plt.subplots(2, 2, constrained_layout=True)
 
     axs[0, 0].scatter(name, prices)
-    axs[0, 0].plot(moto[PRICE], linewidth=10)
+    axs[0, 0].scatter(moto[NAME], moto[PRICE], c=MOTO_COLOR, linewidth=MOTO_LW)
     axs[0, 0].set_title('Model == name')
     axs[0, 0].set_ylabel('Preu (€)')        
     axs[0, 0].get_xaxis().set_visible(False)
 
     axs[0, 1].scatter(year, prices)
-    axs[0, 1].plot(moto[PRICE], linewidth=10)
+    axs[0, 1].scatter(moto[YEAR], moto[PRICE], c=MOTO_COLOR, linewidth=MOTO_LW)
     axs[0, 1].set_title('any')
-    axs[0, 1].set_ylabel('Preu (€)') 
-    axs[0, 1].set_xlim([min(year) - PLOT_MARGIN_YEAR,
-                        max(year) + PLOT_MARGIN_YEAR])
+    axs[0, 1].set_ylabel('Preu (€)')
     axs[0, 1].get_xaxis().set_visible(True)
 
     axs[1, 0].scatter(brand, prices)
-    axs[1, 0].plot(moto[PRICE], linewidth=10)
+    axs[1, 0].scatter(moto[BRAND_ID], moto[PRICE], c=MOTO_COLOR, linewidth=MOTO_LW)
     axs[1, 0].set_title('marca == brand')
     axs[1, 0].set_ylabel('Preu (€)')
     axs[1, 0].get_xaxis().set_visible(False)
 
     axs[1, 1].scatter(fuel, prices)
-    axs[1, 1].plot(moto[PRICE], linewidth=10)
+    axs[1, 1].scatter(moto[FUEL], moto[PRICE], c=MOTO_COLOR, linewidth=MOTO_LW)
     axs[1, 1].set_title('gasolina')
     axs[1, 1].set_ylabel('Preu (€)')
-    axs[1, 1].set_xlim([min(fuel)*(1 - PLOT_MARGIN_FUEL),
-                        max(fuel)*(1 + PLOT_MARGIN_FUEL)])
     axs[1, 1].get_xaxis().set_visible(True)
 
     fig.suptitle('Comparació multiparamètrica ', fontsize=20)
