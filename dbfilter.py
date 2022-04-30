@@ -30,5 +30,5 @@ class DBFilter:
         self.param_value = param_value
 
     def apply(self, db):
-        # THE HORROR
+        # THE HORROR -> lluc, are u okey?
         return db[CMP_MAPPING[self.cmp](db[self.param], self.param_value)]

@@ -1,22 +1,41 @@
-#!/usr/bin/env python3
-import dbfilter
-from config import *
-from dbwrapper import DBWrapper
-from dbfilter import DBFilter
+import tkinter as tk
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg,
+    NavigationToolbar2Tk
+)
+import grafiques
+from Test_DB_Wrapper import *
+#import dbwrapper
+#import dbfilter
+
+""""
+Aqui va la part del Lluc
+
+"""
 
 
-def main():
-    wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
-    # query = wrapper.get_moto(100)
-    # query = wrapper.filter_by_param(NAME, 'R 100 RT   (1978-1996)')
-    filters = []
-    filters.append(DBFilter(PRICE, dbfilter.LT, 6000))
-    filters.append(DBFilter(PRICE, dbfilter.GE, 5990))
-    query = wrapper.apply_filters(filters)
-
-    print(query)
+class Window(tk.Tk): 
+    def __init__(self, matrix):
+        super().__init__()
+        self.title('Comparar motocicleta')
+        moto = [28277, 'Primavera  125 3V Touring ABS (2014-2020)', 99, 2016, 2, 5997]
+        figure_canvas = FigureCanvasTkAgg(grafiques.graficar(matrix, moto), self)
+        NavigationToolbar2Tk(figure_canvas, self)
 
 
-if __name__ == "__main__":
-    main()
+
+if __name__ == '__main__':
+    test = Test()
+    print(test)
+    print("+++++++++++++++++++++++++++query returned by Test_DB_Wrapper")
+    window=Window(test)
+    window.mainloop()
+
+
+
+
+
 
