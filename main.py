@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
-import tkinter as tk
-import matplotlib
 
-import dbfilter
-import grafiques
-from config import *
-from dbwrapper import DBWrapper
-from dbfilter import DBFilter
+import tkinter as tk
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk
 )
+
 import grafiques
-from Test_DB_Wrapper import *
-#import dbwrapper
-#import dbfilter
+import dbfilter
+from config import *
+from dbwrapper import DBWrapper
+from dbfilter import DBFilter
 
 
 class Window(tk.Tk):
     def __init__(self, matches, moto):
         super().__init__()
-        self.title('Comparar motocicleta')
+        self.title('Compare motomami')
         figure_canvas = FigureCanvasTkAgg(grafiques.graficar(matches, moto), self)
         NavigationToolbar2Tk(figure_canvas, self)
 
@@ -28,6 +24,7 @@ class Window(tk.Tk):
 def main():
     wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
 
+    # Some sample data
     query = wrapper.get_moto(123)
 
     filters = []
