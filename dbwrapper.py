@@ -40,15 +40,18 @@ class DBWrapper:
         self.df_brands = df_brands
         self.df_versions = df_versions
 
+    # Returns all the data from the moto (id, name, brand_id, year, fuel, price)
     def get_moto(self, qid):
         idx = self.df_versions[ID] == qid
         query = self.df_versions[idx]
 
         return query.values[0]
 
+    # By the brand_id returns the brand_name
     def get_brand(self, bid):
         return self.df_brands[self.df_brands[ID] == bid]
 
+    # Applys multiple filters and returns the result as a sorted (PRICE by default) numpy.ndarray
     def apply_filters(self, filters, sort_param=PRICE):
         query = self.df_versions
         for f in filters:
@@ -58,6 +61,9 @@ class DBWrapper:
 
         return query[query[:, sort_param].argsort()]
 
+    # Coincidence search
+    # Searches the coincidences in value of a certain parameter (name,year...) and returns all the coincidences
+    # ordered by the sort parameter in increasing order
     def filter_by_param(self, param, param_name, sort_param=PRICE):
         idx = self.df_versions[param] == param_name
         query = self.df_versions[idx].values
