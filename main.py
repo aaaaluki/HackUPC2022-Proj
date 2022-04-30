@@ -49,9 +49,18 @@ def get_moto(df_brands, df_versions, qid):
     return query.values[0]
 
 
+def filter_by_param(df_brands, df_versions, param, param_name, sort_param=PRICE):
+    idx = df_versions[param] == param_name
+    query = df_versions[idx].values
+    sorted_query = query[query[:, sort_param].argsort()]
+
+    return sorted_query
+
+
 def main():
     df_brands, df_versions = setup()
-    query = get_moto(df_brands, df_versions, QUERY_ID)
+    # query = get_moto(df_brands, df_versions, QUERY_ID)
+    query = filter_by_param(df_brands, df_versions, NAME, 'R 100 RT   (1978-1996)')
 
     print(query)
 
