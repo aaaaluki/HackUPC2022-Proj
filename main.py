@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import sys
 
+import pandas as pd
 import psycopg2
 
 from config import *
@@ -8,41 +10,45 @@ from config import *
 QUERY_ID = 100
 
 
-def get_moto(cur, qid):
-    # Get all cols for the specified moto
-    cur.execute('SELECT * FROM versions WHERE id = {};'.format(qid))
-    moto = cur.fetchone()
-    cur.execute('SELECT name FROM brands WHERE id = {};'.format(moto[BRAND_ID]))
-    brand = cur.fetchone()
-
-    if DEBUG:
-        print('ID: {}'.format(moto[ID]))
-        print('NAME: {}'.format(moto[NAME]))
-        print('BRAND: {}'.format(brand[0]))
-        print('BRAND_ID: {}'.format(moto[BRAND_ID]))
-        print('YEAR: {}'.format(moto[YEAR]))
-        print('FUEL: {}'.format(moto[FUEL]))
-        print('PRICE: {}'.format(moto[PRICE]))
-
-
-def main():
-    # Connect to DB
-    conn = psycopg2.connect(
+def setup():
+    try:
+        conn = psycopg2.connect(
             host=DB_HOST,
             database=DB_NAME,
             user=DB_USER,
             password=DB_PASS)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        sys.exit(1)
 
-    # Create a cursor
-    cur = conn.cursor()
+    cursor = conn.cursor()
 
-    # Execute a statement
-    get_moto(cur, QUERY_ID)
+    try:
+        cursor.execute('SELECT * FROM versions;')
+        versions = cursor.fetchall()
+        df_versions = pd.DataFrame(versions)
 
-    # Close the communication with the PostgreSQL
-    cur.close()
+        cursor.execute('SELECT * FROM brands;')
+        brands = cursor.fetchall()
+        df_brands = pd.DataFrame(brands)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cursor.close()
+        sys.exit(1)
+
+    cursor.close()
+
+    return df_brands, df_versions
 
 
-if __name__ == '__main__':
-    main()
+def main(df_brands, df_versions):
+    idx = df_versions[ID] == QUERY_ID
+    query = df_versions[idx]
+    brand = df_brands[df_brands[ID] == query[BRAND_ID][QUERY_ID - 1]]
+    print(query)
+
+
+if __name__ == "__main__":
+    df_brands, df_versions = setup()
+    main(df_brands, df_versions)
 
