@@ -49,9 +49,17 @@ class DBWrapper:
     def get_brand(self, bid):
         return self.df_brands[self.df_brands[ID] == bid]
 
+    def apply_filters(self, filters, sort_param=PRICE):
+        query = self.df_versions
+        for f in filters:
+            query = f.apply(query)
+
+        query = query.values
+
+        return query[query[:, sort_param].argsort()]
+
     def filter_by_param(self, param, param_name, sort_param=PRICE):
         idx = self.df_versions[param] == param_name
         query = self.df_versions[idx].values
-        sorted_query = query[query[:, sort_param].argsort()]
 
-        return sorted_query
+        return query[query[:, sort_param].argsort()]

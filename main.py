@@ -9,8 +9,10 @@ def main():
     wrapper = DBWrapper(DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
     # query = wrapper.get_moto(100)
     # query = wrapper.filter_by_param(NAME, 'R 100 RT   (1978-1996)')
-    fltr = DBFilter(ID, dbfilter.LT, 123)
-    query = fltr.apply(wrapper.df_versions).values
+    filters = []
+    filters.append(DBFilter(PRICE, dbfilter.LT, 6000))
+    filters.append(DBFilter(PRICE, dbfilter.GE, 5990))
+    query = wrapper.apply_filters(filters)
 
     print(query)
 
