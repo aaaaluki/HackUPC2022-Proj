@@ -1,3 +1,4 @@
+import tkinter
 import tkinter as tk
 import matplotlib
 matplotlib.use('TkAgg')
@@ -10,11 +11,6 @@ import grafiques
 from Test_DB_Wrapper import *
 #import dbwrapper
 #import dbfilter
-
-""""
-Aqui va la part del Lluc
-
-"""
 
 
 class Window(tk.Tk): 
